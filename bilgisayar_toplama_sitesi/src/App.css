@@ -1,0 +1,549 @@
+/* src/App.css */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* STICKY İÇİN ÖNEMLİ: Kök elementte kısıtlama olmamalı */
+    overflow: visible;
+}
+
+.App {
+    max-width: 1300px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* !! EN ÖNEMLİ KURAL !! */
+    /* 'position: sticky'nin çalışması için 'hidden' veya 'auto' olmamalı */
+    overflow: visible;
+}
+
+.App h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* YENİ: İki sütunlu ana konteyner */
+.app-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+
+    /* !! ÖNEMLİ KURAL 2 !! */
+    /* 'align-items: flex-start' olmalı ki sidebar gereksiz uzamasın */
+    align-items: flex-start;
+}
+
+/* YENİ: Ana içerik (sol taraf) */
+.main-content {
+    flex: 3; /* Sol taraf daha geniş (örn: 3 birim) */
+    min-width: 0; /* Flexbox taşma sorununu önler */
+}
+
+/* YENİ: Kenar çubuğu (sağ taraf) - YAPISKAN KISIM */
+.sidebar-summary {
+    flex: 1; /* Sağ taraf daha dar (örn: 1 birim) */
+
+    /* !! İSTEDİĞİNİZ KURAL !! */
+    position: sticky;
+    top: 20px; /* Ekranın üstünden 20px boşluk bırak */
+}
+
+
+/* Seçici Bileşenleri için Genel Stil */
+.picker-container {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.picker-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #34495e;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+/* Bölüm Başlıkları */
+.picker-container h3.section-header {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #ccc;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #555; /* Varsayılan renk (Uyumlu ve Stokta için) */
+}
+/* İlk başlığın üst boşluğunu kaldır */
+.picker-container > h3:first-of-type {
+    margin-top: 0;
+}
+.picker-container h3.out-of-stock-header { color: #c62828; border-color: #e57373; } /* Kırmızı */
+.picker-container h3.incompatible-header { color: #ef6c00; border-color: #ffcc80;} /* Turuncu */
+
+.picker-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0; /* Bölümler arasına boşluk */
+}
+/* Son listenin alt boşluğunu kaldır */
+.picker-container ul:last-of-type {
+    margin-bottom: 0;
+}
+
+
+.picker-container li {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.picker-container li span {
+    flex-grow: 1;
+    margin-right: 15px;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.picker-container li .stock-info {
+    color: #c62828; /* Koyu Kırmızı */
+    margin-left: 10px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.picker-container li .conflict-info {
+    color: #ef6c00; /* Koyu Turuncu */
+    margin-left: 10px;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+/* Butonlar için Stil */
+.picker-container button {
+    padding: 6px 12px;
+    border: 1px solid #3498db;
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-size: 0.9em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.picker-container button:hover:not(:disabled) {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.picker-container button:disabled {
+    background-color: #bdc3c7;
+    border-color: #bdc3c7;
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* Dinamik Class'lar */
+.picker-container li.selected {
+    border-color: #2980b9; /* Koyu mavi border */
+    border-width: 2px;
+    background-color: #eaf5ff; /* Açık mavi arka plan */
+}
+
+/* Stokta Olmayan (Uyumlu) */
+.picker-container li.out-of-stock {
+    background-color: #ffebee; /* Açık Kırmızı */
+    border-color: #ef9a9a;   /* Biraz daha belirgin kırmızı border */
+    opacity: 0.8;            /* Hafif soluk */
+    cursor: not-allowed;
+}
+.picker-container li.out-of-stock span:first-child {
+    /* text-decoration: line-through; */ /* İsteğe Bağlı */
+}
+
+/* Uyumsuz Olanlar */
+.picker-container li.incompatible {
+    background-color: #fff8e1; /* Açık Turuncu/Sarı */
+    border-color: #ffecb3;   /* Biraz daha belirgin turuncu border */
+    opacity: 0.8;            /* Hafif soluk */
+    cursor: not-allowed;
+}
+/* Hover efekti (özel durumlar hariç) */
+.picker-container li:not(.out-of-stock):not(.selected):not(.incompatible):hover {
+    background-color: #f0f9ff; /* Hover için çok hafif mavi */
+    border-color: #aed9f9;
+}
+
+
+/* Özet Paneli Stili (EN ALTTAN ÇIKAN) */
+.summary {
+    margin-top: 30px;
+    border-top: 2px solid #34495e;
+    padding-top: 20px;
+    background-color: #f9fafb;
+    padding: 25px;
+    border-radius: 8px;
+    /* 'position: sticky' ve 'top: 20px' buradan kaldırıldı, */
+    /* çünkü bu artık alttaki özet panelidir ve o görev .sidebar-summary'dedir. */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.summary h2 { margin-top: 0; margin-bottom: 20px; color: #34495e; }
+.summary p { margin-bottom: 12px; color: #555; font-size: 0.95em; display: flex; align-items: flex-start; }
+.summary p strong { color: #2c3e50; min-width: 120px; display: inline-block; margin-right: 10px; }
+.summary .total-price { font-weight: bold; margin-top: 20px; border-top: 1px solid #e0e0e0; padding-top: 15px; font-size: 1.15em; color: #2c3e50; display: flex; justify-content: space-between; }
+.summary .total-price span:first-child { min-width: 120px; }
+
+/* Filtreleme ve Arama Stilleri */
+.filter-search-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+/* YENİ: Filtre Başlığı */
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* DÜZELTME: Filtreler kapalıyken de başlık görünsün diye mb sıfırlandı */
+    margin-bottom: 0;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+    /* Tıklanabilir alan hissi vermek için */
+    cursor: pointer;
+}
+
+/* Başlığın sadece buton değil, tamamının tıklanabilir olması için FilterSearch.tsx'te onClick'i <div className="filter-header"> 'e taşıyabilirsiniz. Şimdilik sadece butonda bırakıyorum. */
+
+.filter-header h4 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* DÜZELTME: Filtre Göster/Gizle Butonu (Ok Stili) */
+.toggle-filter-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: #3498db;
+    cursor: pointer;
+    font-size: 16px; /* Ok boyutu */
+    font-weight: 600;
+    padding: 0;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, transform 0.3s ease; /* Dönüş animasyonu */
+    line-height: 1;
+}
+.toggle-filter-btn:hover {
+    background-color: #f0f9ff;
+    border-color: #e0e0e0;
+}
+
+/* YENİ: Düğme "open" class'ı aldığında oku döndür */
+.toggle-filter-btn.open {
+    transform: rotate(180deg);
+}
+
+
+/* YENİ: Filtre içeriği (animasyon için) */
+.filter-content {
+    overflow: hidden;
+    /* DÜZELTME: Açıldığında üstten boşluk bırak */
+    padding-top: 15px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+    margin-bottom: 15px;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 140px;
+    margin-bottom: 0;
+}
+
+.filter-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.price-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.clear-filters-btn {
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    align-self: flex-end;
+    margin-top: 20px;
+}
+
+.clear-filters-btn:hover {
+    background-color: #5a6268;
+}
+
+.features-filter {
+    margin-top: 10px;
+}
+
+.features-filter label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* YENİ: Modern "pill" stili için grid'i flex'e çevirdik */
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Etiketler arası boşluk */
+}
+
+/* YENİ: Modern Checkbox (Pill/Tag) stilleri */
+.feature-checkbox {
+    display: inline-block; /* Artık flex değil */
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.feature-checkbox input[type="checkbox"] {
+    /* Checkbox'ı tamamen gizle */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.feature-checkbox span {
+    /* Tıklanabilir etiket görünümü */
+    display: block;
+    padding: 6px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 16px; /* Yuvarlak kenarlar */
+    font-size: 13px;
+    font-weight: 500;
+    color: #495057;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none; /* Metin seçilmesini engelle */
+}
+
+.feature-checkbox:hover span {
+    border-color: #adb5bd;
+    background-color: #e9ecef;
+}
+
+.feature-checkbox input[type="checkbox"]:checked + span {
+    /* Seçili durum */
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.feature-checkbox input[type="checkbox"]:focus-visible + span {
+    /* Erişilebilirlik için odaklanma halkası */
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+
+/* Temizleme Butonu Stilleri */
+.clear-selections-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.clear-all-btn {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.clear-all-btn:hover {
+    background-color: #c82333;
+}
+
+/* Scroll-to-Top Butonu */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-to-top-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-to-top-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+
+    /* Mobil görünümde sütunları alt alta getir */
+    .app-container {
+        /* 'column-reverse' sağdaki özeti (tik/çarpı) üste alır */
+        flex-direction: column-reverse;
+    }
+
+    /* Sidebar'ı normal akışa dahil et */
+    .sidebar-summary {
+        width: 100%;
+        position: static; /* Sticky özelliğini iptal et */
+        margin-bottom: 20px;
+        /* 'top' kuralına gerek kalmadı */
+    }
+
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        min-width: auto;
+    }
+
+    .price-range {
+        justify-content: center;
+    }
+
+    .features-grid {
+        /* grid'den flex'e geçtiği için bu kurala gerek kalmadı */
+        /* grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); */
+    }
+
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
